@@ -1,0 +1,5 @@
+Run:
+```bash
+cp env_example .env
+docker compose up --build
+```

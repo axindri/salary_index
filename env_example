@@ -1,0 +1,3 @@
+DEBUG=false
+DOMCLICK_API_URL=docker_api_url
+SECRET_KEY=supersecretkey
