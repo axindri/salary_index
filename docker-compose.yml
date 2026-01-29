@@ -1,5 +1,6 @@
 services:
   app:
+    container_name: salary-index-api
     build: .
     env_file:
       - .env
