@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 
+from fastapi.middleware.cors import CORSMiddleware
+
 from src.api import router
 from src.config import settings
 from src.logger import setup_logging
@@ -12,6 +14,13 @@ app = FastAPI(
     title="Salary index API",
     docs_url="/docs" if settings.debug else None,
     redoc_url="/redoc" if settings.debug else None,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 app.include_router(router)
 
