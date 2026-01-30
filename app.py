@@ -13,7 +13,8 @@ app = FastAPI(
     version=settings.version,
     title="Salary index API",
     docs_url="/docs" if settings.debug else None,
-    redoc_url="/redoc" if settings.debug else None,
+    redoc_url=None,
+    root_path=settings.root_path or None,
 )
 
 app.add_middleware(

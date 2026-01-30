@@ -6,6 +6,9 @@ class Settings(BaseSettings):
     log_format: str = "[%(asctime)s]-[%(levelname)s]-[%(name)s]: %(message)s"
     version: str = "1.0"
 
+    # Set when behind reverse proxy with path prefix (e.g. /backend/salary-index)
+    root_path: str = ""
+
     secret_key: str = "secret_key"
 
     domclick_api_url: str = "domclick_api_url"
