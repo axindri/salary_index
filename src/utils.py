@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from logging import getLogger
+import os
 
 import requests
 from fastapi import HTTPException
@@ -29,9 +30,11 @@ def save_city_prices(city_prices: dict[City, int]) -> None:
         raise HTTPException(status_code=500, detail="Error saving city prices")
 
 
-def load_city_prices() -> tuple[datetime, dict[City, int]]:
+def load_city_prices() -> tuple[datetime, dict[City, int]] | tuple[None, None]:
     try:
         logger.debug("Loading city prices from file=%s", settings.data_file_path)
+        if not os.path.exists(settings.data_file_path):
+            return (None, None)
         with open(settings.data_file_path, "r") as f:
             data = json.load(f)
             return (data["meta"]["updated_at"], {City(key): value for key, value in data["data"].items()})

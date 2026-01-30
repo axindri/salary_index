@@ -13,7 +13,13 @@ logger = getLogger(__name__)
 
 @dataclass
 class PriceParser:
-    def save_cities_sqm_price(self) -> None:
+    def save_cities_sqm_price(self) -> str:
+        actual_at, _ = load_city_prices()
+        if actual_at:
+            actual_at = datetime.fromisoformat(actual_at)
+            now = datetime.now()
+            if actual_at.date() == now.date():
+                return 'Already updated today'
         city_prices: dict[City, int] = {}
         for city in City:
             district_name, city_name = get_district_city_names(city)
@@ -23,6 +29,7 @@ class PriceParser:
             if price is not None:
                 city_prices[city] = price
         save_city_prices(city_prices)
+        return 'Success'
 
 
 @dataclass
@@ -83,6 +90,8 @@ class SalaryIndex:
 
 async def get_salary_index_dependecy() -> SalaryIndex:
     actual_at, city_prices = load_city_prices()
+    if actual_at is None or city_prices is None:
+        raise HTTPException(status_code=404, detail="No city prices found, refresh prices first")
     return SalaryIndex(city_prices=city_prices, actual_at=actual_at)
 
 

@@ -12,15 +12,11 @@ logger = getLogger(__name__)
 router = APIRouter(prefix="/api")
 
 
-@router.post("/parse-price")
+@router.post("/refresh-prices")
 async def parse_price(
-    auth: str = Header(..., description="Authorization"),
     parser: PriceParser = Depends(get_price_parser_dependecy),
 ) -> dict[str, str]:
-    if auth != settings.secret_key:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    parser.save_cities_sqm_price()
-    return {"message": "Success"}
+    return {"message": parser.save_cities_sqm_price()}
 
 
 @router.get("/cities")
